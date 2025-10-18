@@ -36,7 +36,7 @@
       "auto_route": true,
       "strict_route": true
     },
-    { "type": "http", "tag": "http-in", "listen": "::", "listen_port": 10808 }
+    { "type": "mixed", "tag": "mixed-in", "listen": "::", "listen_port": 10808 }
   ],
   "outbounds": [
     {
