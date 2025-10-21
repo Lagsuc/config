@@ -34,7 +34,13 @@
       "type": "tun",
       "address": ["172.19.0.1/30","fdfe:dcba:9876::1/126"],
       "auto_route": true,
-      "strict_route": true
+      "strict_route": true,
+      "route_exclude_address": [
+        "192.168.0.0/16",
+        "10.0.0.0/8",
+        "172.16.0.0/12",
+        "fc00::/7"
+      ]
     },
     { "type": "mixed", "tag": "mixed-in", "listen": "::", "listen_port": 10808 }
   ],
@@ -44,42 +50,46 @@
       "tag": "direct"
     },
     {
-	  "type": "tuic",
-	  "tag": "vps_jp",
-	  "server": "",
-	  "server_port": 443,
-	  "uuid": "8a72cdfb-6139-4d24-d9c4-57936515f5a0",
-	  "password": "pPiQdADhG2",
-	  "congestion_control": "bbr",
-	  "zero_rtt_handshake": false,
-	  "udp_over_stream": true,
-	  "heartbeat": "10s",
-	  "tls": {
-	  "enabled": true,
-	  "disable_sni": false,
-	  "server_name": "",
-	  "insecure": false,
-	  "alpn": ["h3","h2","http/1.1"]
-  	  }
+      "type": "tuic",
+      "tag": "vps_jp",
+      "server": "156.231.141.66",
+      "server_port": 443,
+      "uuid": "8a72cdfb-6139-4d24-d9c4-57936515f5a0",
+      "password": "pPiQdADhG2",
+      "congestion_control": "bbr",
+      "zero_rtt_handshake": false,
+      "udp_over_stream": true,
+      "heartbeat": "10s",
+      "tls": {
+        "enabled": true,
+        "disable_sni": false,
+        "server_name": "lagsuc.dpdns.org",
+        "insecure": false,
+        "alpn": ["h3","h2","http/1.1"]
+      }
     }
   ],
   "route": {
     "rules": [
-      {
-        "action": "sniff"
-      },
+      { "action": "sniff" },
+
       {
         "type": "logical",
         "mode": "or",
         "rules": [
-          {
-            "protocol": "dns"
-          },
-          {
-            "port": 53
-          }
+          { "protocol": "dns" },
+          { "port": 53 }
         ],
         "action": "hijack-dns"
+      },
+      {
+        "ip_cidr": [
+          "192.168.0.0/16",
+          "10.0.0.0/8",
+          "172.16.0.0/12",
+          "fc00::/7"
+        ],
+        "outbound": "direct"
       },
       {
         "ip_is_private": true,
@@ -89,16 +99,9 @@
         "type": "logical",
         "mode": "or",
         "rules": [
-          {
-            "port": 853
-          },
-          {
-            "network": "udp",
-            "port": 443
-          },
-          {
-            "protocol": "stun"
-          }
+          { "port": 853 },
+          { "network": "udp", "port": 443 },
+          { "protocol": "stun" }
         ],
         "action": "reject"
       },
@@ -110,16 +113,13 @@
         "type": "logical",
         "mode": "or",
         "rules": [
-          {
-            "rule_set": "geoip-cn"
-          },
-          {
-            "rule_set": "geosite-geolocation-cn"
-          }
+          { "rule_set": "geoip-cn" },
+          { "rule_set": "geosite-geolocation-cn" }
         ],
         "outbound": "direct"
       }
     ],
+    "final": "vps_jp",
     "rule_set": [
       {
         "type": "remote",
@@ -135,7 +135,6 @@
       }
     ],
     "default_domain_resolver": "local",
-    "auto_detect_interface": true,
-    "final": "vps_jp"
+    "auto_detect_interface": true
   }
 }
