@@ -18,19 +18,18 @@
         }
       ],
 
-      "congestion_control": "cubic",
+      "congestion_control": "bbr",
       "auth_timeout": "3s",
       "zero_rtt_handshake": false,
       "heartbeat": "10s",
 
       "tls": {
         "enabled": true,
-        "certificate_path": "/etc/letsencrypt/live/example.com/fullchain.pem",
-        "key_path": "/etc/letsencrypt/live/example.com/privkey.pem",
+        "certificate_path": "/root/server.crt",
+        "key_path": "/root/server.key",
         "min_version": "1.2",
         "alpn": [
-          "h2",
-          "http/1.1"
+          "h3"
         ]
       }
     }
