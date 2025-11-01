@@ -1,0 +1,49 @@
+{
+  "log": {
+    "level": "info"
+  },
+
+  "inbounds": [
+    {
+      "type": "tuic",
+      "tag": "tuic-443",
+      "listen": "0.0.0.0",
+      "listen_port": 443,
+
+      "users": [
+        {
+          "name": "tuic-user",
+          "uuid": "7f3b8d6a-9c24-4f2b-af0e-1234567890ab",
+          "password": "ChangeMePassword!"
+        }
+      ],
+
+      "congestion_control": "cubic",
+      "auth_timeout": "3s",
+      "zero_rtt_handshake": false,
+      "heartbeat": "10s",
+
+      "tls": {
+        "enabled": true,
+        "certificate_path": "/etc/letsencrypt/live/example.com/fullchain.pem",
+        "key_path": "/etc/letsencrypt/live/example.com/privkey.pem",
+        "min_version": "1.2",
+        "alpn": [
+          "h2",
+          "http/1.1"
+        ]
+      }
+    }
+  ],
+
+  "outbounds": [
+    {
+      "type": "direct",
+      "tag": "direct"
+    }
+  ],
+
+  "route": {
+    "final": "direct"
+  }
+}
